@@ -30,14 +30,14 @@ module.exports.show = async ()=>{
       },
     )
     .then((answer) => {
-      if (answer.index >= 0) {
-        const index = parseInt(answer.index);
+      const index = parseInt(answer.index);
+      if (index >= 0) {
         console.log(taskList[index]);
         inquirer
           .prompt(
             {
               type: 'list',
-              name: 'index',
+              name: 'action',
               message: 'Plz choose what u wanna do',
               choices: [
                 {name: 'Exit', value: 'exit'},
@@ -74,13 +74,13 @@ module.exports.show = async ()=>{
                   break;
               }
         })
-      } else if (answer.index === -2) {
+      } else if (index === -2) {
         inquirer.prompt({
           type: 'input',
           name: 'taskName',
           message: 'Plz input new task',
         }).then(answer4 => {
-          taskList.push({taskName: answer4.taskName, done:false});
+          taskList.push({taskName: answer4.taskName, done: false});
           db.write(taskList);
         });
       }
