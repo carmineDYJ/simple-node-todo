@@ -43,9 +43,13 @@ module.exports.show = async ()=>{
               choices: [
                 {name: 'Exit', value: 'exit'},
                 {name: 'MarkAsDone', value: 'MarkAsDone'},
-                {},
+                {name: 'MarkAsUndone', value: 'MarkAsUndone'},
+                {name: 'Delete', value: 'Delete'},
+                {name: 'Update', value: 'Update'},
               ]
-            })
+            }).then(answer2 => {
+
+        })
       } else if (answer.index === -2) {
 
       }
