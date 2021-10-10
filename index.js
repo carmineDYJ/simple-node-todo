@@ -18,9 +18,6 @@ module.exports.clear = async ()=>{
 
 module.exports.show = async ()=>{
   const taskList = await db.read();
-  // taskList.forEach((task, index)=>{
-  //   console.log(`${task.done ? '[o]': '[x]'} Task${index + 1}: ${task.taskName}`);
-  // });
   inquirer
     .prompt(
       {
@@ -34,6 +31,8 @@ module.exports.show = async ()=>{
     )
     .then((answer) => {
       if (answer.index >= 0) {
+        const index = parseInt(answer.index);
+        console.log(taskList[index]);
         inquirer
           .prompt(
             {
@@ -48,10 +47,42 @@ module.exports.show = async ()=>{
                 {name: 'Update', value: 'Update'},
               ]
             }).then(answer2 => {
-
+              switch (answer2.action){
+                case 'MarkAsDone':
+                  taskList[index].done = true;
+                  console.log(taskList[index]);
+                  db.write(taskList);
+                  break;
+                case 'MarkAsUndone':
+                  taskList[index].done = false;
+                  db.write(taskList);
+                  break;
+                case 'Update':
+                  inquirer.prompt({
+                    type: 'input',
+                    name: 'newName',
+                    message: 'Plz input new name',
+                    default: taskList[index].taskName
+                  }).then(answer3 => {
+                    taskList[index].taskName = answer3.newName;
+                    db.write(taskList);
+                  });
+                  break;
+                case 'Delete':
+                  taskList.splice(index, 1);
+                  db.write(taskList);
+                  break;
+              }
         })
       } else if (answer.index === -2) {
-
+        inquirer.prompt({
+          type: 'input',
+          name: 'taskName',
+          message: 'Plz input new task',
+        }).then(answer4 => {
+          taskList.push({taskName: answer4.taskName, done:false});
+          db.write(taskList);
+        });
       }
     });
 }
