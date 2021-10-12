@@ -25,7 +25,7 @@ const db = {
   write(taskList, path=dbPath){
     return new Promise((resolve, reject)=>{
       const taskListStr = JSON.stringify(taskList);
-      fs.writeFile(dbPath, taskListStr + '\n', (error)=>{
+      fs.writeFile(path, taskListStr + '\n', (error)=>{
         if (error) return reject(error);
         else resolve();
       });
